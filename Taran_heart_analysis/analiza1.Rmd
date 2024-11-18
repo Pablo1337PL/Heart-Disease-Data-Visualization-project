@@ -224,10 +224,10 @@ print(p)
        x = "Year",
        y = "Ratio",
        color = "Race") +  # Label for legend
-  scale_color_manual(values = c("White" = "#ffffff", "Black" = "#721f14")) +  # Manual color specification
+  scale_color_manual(values = c("White" = "#ffffff", "Black" = "#d85d4c")) +  # Manual color specification
   guides(color = guide_legend(
     override.aes = list(
-      color = c("#721f14", "white")  # Changes "White" legend text color to gray, "Black" remains black
+      color = c("#d85d4c", "white")  # Changes "White" legend text color to gray, "Black" remains black
     )
   )) +
   theme(
@@ -238,11 +238,11 @@ print(p)
     plot.title = element_blank(),
     legend.text = element_text(color = "white"),
     legend.title = element_text(color = "white"),
-    panel.background = element_rect(fill = "#a09386", colour = NA),
-    plot.background = element_rect(fill = "#a09386", colour = NA),
-    legend.background = element_rect(fill = "#a09386"),
-    legend.box.background = element_rect(fill = "#a09386", color = NA),
-    legend.key = element_rect(fill = "#a09386"),
+    panel.background = element_rect(fill = "#535966", colour = NA),
+    plot.background = element_rect(fill = "#535966", colour = NA),
+    legend.background = element_rect(fill = "#535966"),
+    legend.box.background = element_rect(fill = "#535966", color = NA),
+    legend.key = element_rect(fill = "#535966"),
     plot.margin = margin(0, 0, 0, 0)  # Optional: remove margins to prevent transparent borders
   ) -> p2
   
@@ -551,7 +551,7 @@ differences_long$Variable <- factor(differences_long$Variable,
 
 ggplot(differences_long, aes(x = Value, y = as.factor(Variable), fill = Value<0)) +
   geom_bar(stat = "identity", position = "dodge") +
-  scale_fill_manual(values = c("TRUE" = "#D2B48C", "FALSE" = "#983223"),
+  scale_fill_manual(values = c("TRUE" = "#D2B48C", "FALSE" = "#d85d4c"),
                     labels = c("TRUE" = "Women", "FALSE" = "Men"))+
   labs(x="Difference in odds of dying due to heart disease between men and women", 
        title = "Ratio of dead of heart disease to all that were using/had:") +
@@ -567,13 +567,13 @@ ggplot(differences_long, aes(x = Value, y = as.factor(Variable), fill = Value<0)
         legend.text = element_text(color = "white"),
         text = element_text(size=25),
         legend.title = element_blank(),
-  panel.background = element_rect(fill = "#a09386",
+  panel.background = element_rect(fill = "#535966",
                                   colour = NA_character_), # necessary to avoid drawing panel outline
-  plot.background = element_rect(fill = "#a09386",
+  plot.background = element_rect(fill = "#535966",
                                  colour = NA_character_), # necessary to avoid drawing plot outline
-  legend.background = element_rect(fill = "#a09386", color = NA),
-  legend.box.background = element_rect(fill = "#a09386", color = NA),
-  legend.key = element_rect(fill = "#a09386")
+  legend.background = element_rect(fill = "#535966", color = NA),
+  legend.box.background = element_rect(fill = "#535966", color = NA),
+  legend.key = element_rect(fill = "#535966")
 )+ guides(fill = guide_legend(title = NA)) -> p
   
 print(p)
