@@ -1,28 +1,18 @@
 ---
-title: "Blood analysis"
+title: "Heart problems analysis"
 output: html_notebook
 ---
-
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
-
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
-
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
 
 ```{r Dane}
 library(dplyr)
 library(ggplot2)
 library(tidyr)
 
-#cardio <- read.csv("cardio_train.csv", sep = ";")
-#cardio_cleaned <- read.csv("cardio_cleaned.csv")
-
-
-
+cardio <- read.csv("cardio_train.csv", sep = ";")
+cardio_cleaned <- read.csv("cardio_cleaned.csv")
 ```
 
 ```{r}
-
 zmienne <- c("height", "weight", "ap_hi", "ap_lo", "cholesterol")
 for(zmienna in zmienne){
   pom <- cardio %>%  
@@ -41,17 +31,9 @@ for(zmienna in zmienne){
 pom2 <- cardio %>% group_by(gender) %>% summarise(count=n())
 
 barplot(pom2$count, pom2$gender, names.arg = pom2$gender)
-
-
-pom
-ggplot()+
-  geom_boxplot()
-
 ```
 
 ```{r}
-
-
 zmienne <- c("height", "weight", "ap_hi", "ap_lo")
 for(zmienna in zmienne){
   pom <- cardio_cleaned[is.na(cardio_cleaned)] <- 0
@@ -70,12 +52,12 @@ for(zmienna in zmienne){
 ```
 
 
-```{r}
+
+
+```{r Races prep}
 library(dplyr)
 library(ggplot2)
 library(tidyr)
-
-
 
 usa_death_data <- read.csv("slctmort.csv", sep = ";")
 
@@ -91,18 +73,13 @@ usa_death_data_long <- usa_death_data %>%
   mutate_all(~ replace(., . == "" | . == "- - -" | . == "…", NA)) %>% 
   mutate(Deaths = as.integer(gsub(",", "", Deaths)),
          Year = as.numeric(Year))
-
-
 ```
 
 ```{r}
-
-
-
 usa_death_data_long %>%
       ggplot(aes(x = as.factor(Year), y = Deaths, color = Races)) +
       geom_point(size = 1) +
-      geom_line() +  # Optionally add lines to connect points
+      geom_line() + 
       labs(title = "Death Counts by Year ",
            x = "Year", 
            y = "Number of Deaths",
@@ -116,7 +93,7 @@ usa_death_data_long %>%
   filter(Races %in% Races_causes[c(1, 2)]) %>% 
       ggplot(aes(x = Year, y = Deaths, color = as.factor(Races))) +
       geom_point(size = 1) +
-      geom_line() +  # Optionally add lines to connect points
+      geom_line() + 
       ylim(c(0, max(usa_death_data_long$Deaths)))+
       labs(title = "Death Counts by Year ",
            x = "Year", 
@@ -128,7 +105,7 @@ usa_death_data_long %>%
   filter(Races %in% Races_causes[c(7, 8, 9, 10, 11, 12, 27, 28)]) %>% 
       ggplot(aes(x = Year, y = Deaths, color = as.factor(Races))) +
       geom_point(size = 1) +
-      geom_line() +  # Optionally add lines to connect points
+      geom_line() +
       ylim(c(0, max(usa_death_data_long$Deaths)))+
       labs(title = "Death Counts by Year ",
            x = "Year", 
@@ -141,7 +118,7 @@ usa_death_data_long %>%
   filter(Races %in% Races_causes[c(7, 8, 11, 12)]) %>% 
       ggplot(aes(x = Year, y = Deaths, color = as.factor(Races))) +
       geom_point(size = 1) +
-      geom_line() +  # Optionally add lines to connect points
+      geom_line() +
       ylim(c(0, max(usa_death_data_long$Deaths)))+
       labs(title = "Death Counts by Year ",
            x = "Year", 
@@ -162,7 +139,7 @@ pom<-usa_death_data_long %>%
 pom %>% 
   ggplot(aes(x = Year, y = Deaths, color = as.factor(Races))) +
   geom_point(size = 1) +
-  geom_line() +  # Optionally add lines to connect points
+  geom_line() + 
   ylim(c(0, max(usa_death_data_long$Deaths)))+
   labs(title = "Death Counts by Year ",
        x = "Year", 
@@ -182,10 +159,10 @@ pom %>%
        x = "Year",
        y = "Ratio",
        color = "Race") +  # Label for legend
-  scale_color_manual(values = c("White" = "#ffffff", "Black" = "#721f14")) +  # Manual color specification
+  scale_color_manual(values = c("White" = "#ffffff", "Black" = "#721f14")) +
   guides(color = guide_legend(
     override.aes = list(
-      color = c("#721f14", "white")  # Changes "White" legend text color to gray, "Black" remains black
+      color = c("#721f14", "white")
     )
   )) +
   theme(
@@ -223,18 +200,18 @@ print(p)
   labs(title = "Death ratios for White and Black",
        x = "Year",
        y = "Ratio",
-       color = "Race") +  # Label for legend
-  scale_color_manual(values = c("White" = "#ffffff", "Black" = "#d85d4c")) +  # Manual color specification
+       color = "Race") + 
+  scale_color_manual(values = c("White" = "#ffffff", "Black" = "#d85d4c")) + 
   guides(color = guide_legend(
     override.aes = list(
-      color = c("#d85d4c", "white")  # Changes "White" legend text color to gray, "Black" remains black
+      color = c("#d85d4c", "white")
     )
   )) +
   theme(
-    text = element_text(size = 25, color = "white", family = "Playfair Display"),  # Set color explicitly to white and font family
-    axis.text.x = element_text(angle = 0, hjust = 1, color = "white"),  # Explicitly set axis text color
-    axis.text = element_text(color = "white"),  # Ensure axis text is white
-    axis.title = element_text(color = "white"),  # Ensure axis titles are white
+    text = element_text(size = 25, color = "white", family = "Playfair Display"), 
+    axis.text.x = element_text(angle = 0, hjust = 1, color = "white"),
+    axis.text = element_text(color = "white"), 
+    axis.title = element_text(color = "white"),
     plot.title = element_blank(),
     legend.text = element_text(color = "white"),
     legend.title = element_text(color = "white"),
@@ -243,7 +220,7 @@ print(p)
     legend.background = element_rect(fill = "#535966"),
     legend.box.background = element_rect(fill = "#535966", color = NA),
     legend.key = element_rect(fill = "#535966"),
-    plot.margin = margin(0, 0, 0, 0)  # Optional: remove margins to prevent transparent borders
+    plot.margin = margin(0, 0, 0, 0)
   ) -> p2
   
   
@@ -252,29 +229,21 @@ print(p)
   plot = p2,
   filename = "Races-plot_v2.png"#,bg = "transparent"
 )
-
-  
-
 ```
 
 
 
 ```{r}
-
-
-
 for(i in 1:((length(colnames(usa_death_data))-1)/2) ){
   usa_death_data_long <- usa_death_data %>%
     pivot_longer(cols = c(.data[[colnames(usa_death_data)[[i*2-1]]]], .data[[colnames(usa_death_data)[[i*2]]]]),
                  names_to = "Cause",
                  values_to = "Deaths")
   
-  
-  # Plot both variables on the same plot with different colors
   p<-usa_death_data_long %>%
       ggplot(aes(x = Year, y = Deaths, color = Cause)) +
       geom_point(size = 1) +
-      geom_line() +  # Optionally add lines to connect points
+      geom_line() + 
       labs(title = paste("Death Counts by Year ", colnames(usa_death_data)[[i*2-1]]),
            x = "Year", 
            y = "Number of Deaths",
@@ -282,11 +251,9 @@ for(i in 1:((length(colnames(usa_death_data))-1)/2) ){
       theme_minimal()
   print(p)
 }
-
 ```
 
-```{r}
-
+```{r frmgham analysis prep}
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -295,14 +262,10 @@ frmgham <- read.csv("frmgham2.csv")
 str(frmgham)
 
 frmgham <- frmgham %>% mutate(SEX = if_else(SEX==1, "Male", "Female"))
-
-
 ```
 
 
 ```{r}
-
-
 zmienne <- colnames(frmgham)[c(3,4,5, 8, 9, 12, 13, 20, 22, 23)]
 for(j in zmienne){
   for(i in zmienne){
@@ -325,7 +288,6 @@ for(j in zmienne){
 ```
 
 ```{r}
-
 normalise <- function(x, na.rm = FALSE) ((x-min(x, na.rm = na.rm)) / 
                           (max(x, na.rm = na.rm)-min(x, na.rm = na.rm)))
 
@@ -388,19 +350,14 @@ frmgham %>%
   ggplot(aes(x = as.factor(PREVCHD), y=CIGPDAY))+
   geom_boxplot()
 
-
 #frmgham %>% 
 #  filter(CIGPDAY>0) %>% 
 #  ggplot(aes(x=CIGPDAY, fill = SEX))+
 #  geom_density(alpha = 0.7)
-
-
-
 ```
 
 ```{r}
 #frmgham <- frmgham %>% filter(complete.cases(.))
-
 
 frmgham %>%
   ggplot(aes(y=AGE, x=as.character(SEX))) +
@@ -419,106 +376,6 @@ frmgham %>%
 
 
 ```{r}
-frmgham %>%  
-  group_by(SEX) %>% 
-  summarise("Stroke yes-no" = mean(STROKE),
-            mean(MI_FCHD),
-            mean(DIABETES),
-            mean(CIGPDAY, na.rm = TRUE),
-            "Use of Anti-hypertensive medication" = mean(BPMEDS, na.rm = TRUE)) -> pom  
-
-# Compute proportional difference between Female and Male values for each variable
-
-proportional_diff <- (pom[pom$SEX == "Female", -1] - pom[pom$SEX == "Male", -1]) / 
-  (pom[pom$SEX == "Female", -1] + pom[pom$SEX == "Male", -1])
-
-# Convert to a data frame and set column names
-proportional_diff <- as.data.frame(proportional_diff)
-colnames(proportional_diff) <- colnames(pom)[-1]
-
-# Reshape the data into a long format for ggplot
-proportional_diff_long <- proportional_diff %>%
-  pivot_longer(cols = everything(),
-               names_to = "Variable",
-               values_to = "Value")
-
-# Plot the proportional difference with color indicating sex
-ggplot(proportional_diff_long, aes(x = as.factor(Variable), y = Value, fill = Value > 0)) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = c("TRUE" = "#D2B48C", "FALSE" = "#CD5C5C"),
-                    labels = c("More men", "More women"))+
-  labs(y = "Proportional Difference", title = "Proportional Difference by Variable") +
-   theme(plot.background = element_rect(fill = "#983223"),
-        panel.background = element_rect(fill = "#983223"),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.text = element_text(color = "black"),
-        axis.title = element_text(color = "black"),
-        axis.title.x = element_blank(),
-        plot.title = element_text(color = "black"),
-        legend.background = element_rect(color = "#983223"),
-        legend.box.background = element_rect(color = "#983223"),
-        text = element_text(size=15)) +
-  theme(legend.background = element_rect(fill = "#983223", color = NA)) +
-    theme(legend.text = element_text(color = "black"),        # Legend text color
-          legend.title = element_text(color = "black")) +
-  guides(fill = guide_legend(title = "Dominance"))
-
-
-frmgham %>% 
-  filter(DEATH==1) %>% 
-  group_by(SEX) %>% 
-  summarise("Stroke yes-no" = mean(STROKE),
-            "Heart problems"=mean(MI_FCHD),
-            "Diabetes"=mean(DIABETES),
-            "Cigarettes"=mean(CIGPDAY, na.rm = TRUE),
-            "Anti-hypertensive meds" = mean(BPMEDS, na.rm = TRUE)) -> pom  
-
-# Compute proportional difference between Female and Male values for each variable
-proportional_diff <- (pom[pom$SEX == "Female", -1] - pom[pom$SEX == "Male", -1]) / 
-  (pom[pom$SEX == "Female", -1] + pom[pom$SEX == "Male", -1])
-
-# Convert to a data frame and set column names
-proportional_diff <- as.data.frame(proportional_diff)
-colnames(proportional_diff) <- colnames(pom)[-1]
-
-# Reshape the data into a long format for ggplot
-proportional_diff_long <- proportional_diff %>%
-  pivot_longer(cols = everything(),
-               names_to = "Variable",
-               values_to = "Value")
-
-# Plot the proportional difference with color indicating sex
-proportional_diff_long$Variable <- factor(proportional_diff_long$Variable,
-                                          levels = c("Cigarettes", "Diabetes",
-                                                     "Stroke yes-no", "Heart problems", 
-                                                     "Anti-hypertensive meds"))
-
-
-ggplot(proportional_diff_long, aes(x = as.factor(Variable), y = Value, fill = Value > 0)) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = c("TRUE" = "#D2B48C", "FALSE" = "#CD5C5C"),
-                    labels = c("More men", "More women"))+
-  labs(y = "Proportional Difference", title = "Proportional Difference by Variable") +
-   theme(plot.background = element_rect(fill = "#983223"),
-        panel.background = element_rect(fill = "#983223"),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.text = element_text(color = "black"),
-        axis.title = element_text(color = "black"),
-        axis.title.x = element_blank(),
-        plot.title = element_text(color = "black"),
-        legend.background = element_rect(color = "#983223"),
-        legend.box.background = element_rect(color = "#983223"),
-        text = element_text(size=15)) +
-  theme(legend.background = element_rect(fill = "#983223", color = NA)) +
-    theme(legend.text = element_text(color = "black"),        # Legend text color
-          legend.title = element_text(color = "black")) +
-  guides(fill = guide_legend(title = "Dominance"))
-
-
-```
-
-
-```{r}
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -531,7 +388,6 @@ differences <- data.frame(
   Diabetes = -25,  # 25% higher risk of heart disease mortality among women with diabetes
   Smoking = -30  # 30% higher risk of heart disease mortality in smoking women than men
 )
-
 
 differences_long <- differences %>% 
   pivot_longer(cols = everything(),
@@ -546,8 +402,6 @@ differences_long$Variable <- factor(differences_long$Variable,
                                                      "Alcohol",
                                             "Hypertension"
                                                      ))
-
-
 
 ggplot(differences_long, aes(x = Value, y = as.factor(Variable), fill = Value<0)) +
   geom_bar(stat = "identity", position = "dodge") +
@@ -568,9 +422,9 @@ ggplot(differences_long, aes(x = Value, y = as.factor(Variable), fill = Value<0)
         text = element_text(size=25),
         legend.title = element_blank(),
   panel.background = element_rect(fill = "#535966",
-                                  colour = NA_character_), # necessary to avoid drawing panel outline
+                                  colour = NA_character_),
   plot.background = element_rect(fill = "#535966",
-                                 colour = NA_character_), # necessary to avoid drawing plot outline
+                                 colour = NA_character_),
   legend.background = element_rect(fill = "#535966", color = NA),
   legend.box.background = element_rect(fill = "#535966", color = NA),
   legend.key = element_rect(fill = "#535966")
@@ -584,38 +438,3 @@ print(p)
 )
 
 ```
-
-```{r}
-frm2 <- frmgham
-
-cosiek <- frm2 %>% filter(PERIOD == 1) %>%
-  group_by(SEX) %>%
-  summarise(cukier = sum(DIABETES == 1 & MI_FCHD == 1)/sum(DIABETES == 1),bez = sum(MI_FCHD)/n())
-cosiek <- pivot_longer(cosiek,c(cukier,bez))
-cosiek <- cosiek %>% mutate(SEX = case_when(SEX == 1 ~"mężczyzna",SEX == 2 ~"kobieta"))
-cosiek$imie <- factor(paste(cosiek$name, cosiek$SEX), levels = c("bez kobieta","cukier kobieta", "bez mężczyzna", "cukier mężczyzna"))
-ggplot(cosiek)+
-  geom_bar(aes(x=imie, y = value), stat = "identity")
-cosiek
-```
-
-
-
-```{r}
-set.seed(1)
-y <- rnorm(100)
-df <- data.frame(
-  x = 1,
-  y0 = min(y),
-  y25 = quantile(y, 0.40),
-  y50 = mean(y),
-  y75 = quantile(y, 0.60),
-  y100 = max(y)
-)
-ggplot(df, aes(x)) +
-  geom_boxplot(
-   aes(ymin = y0, lower = y25, middle = y50, upper = y75, ymax = y100),
-   stat = "identity"
- )
-```
-
